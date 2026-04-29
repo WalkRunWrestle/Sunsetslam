@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sunset Slam | WRW Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fff8f2;
+      --panel:#ffffff;
+      --panel2:#fff4ea;
+      --border:#ead8ca;
+      --text:#16181d;
+      --muted:rgba(22,24,29,.66);
+      --orange:#ff6a3d;
+      --pink:#ff4f7b;
+      --gold:#f6c257;
+      --green:#048d64;
+      --green2:#19c58f;
+      --danger:#a62d2d;
+      --shadow:0 18px 45px rgba(108,58,24,.13);
+    }
+
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0}
+    body{
+      min-height:100vh;
+      font-family:Inter, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(800px 430px at 18% 4%, rgba(255,106,61,.18), transparent 60%),
+        radial-gradient(750px 420px at 92% 0%, rgba(255,79,123,.14), transparent 55%),
+        linear-gradient(180deg,#fffdf9,#fff5ec 48%,#f8efe8);
+    }
+
+    .screen{
+      min-height:100vh;
+      display:none;
+      padding:14px 10px 22px;
+      justify-content:center;
+      align-items:center;
+    }
+    .screen.active{display:flex}
+
+    .card{
+      width:min(96vw,760px);
+      background:rgba(255,255,255,.94);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:14px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(6px);
+    }
+
+    .login-card{
+      width:min(94vw,390px);
+      text-align:center;
+      padding:18px 14px;
+    }
+
+    .logo{
+      display:block;
+      max-width:138px;
+      width:100%;
+      height:auto;
+      margin:0 auto 10px;
+    }
+
+    .medal{
+      display:block;
+      width:100%;
+      max-width:138px;
+      height:auto;
+      margin:12px auto;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:#fff;
+      padding:6px;
+      object-fit:contain;
+    }
+
+    .medal-small{
+      display:block;
+      width:100%;
+      max-width:120px;
+      height:auto;
+      margin:8px auto 12px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:#fff;
+      padding:5px;
+      object-fit:contain;
+    }
+
+    h1,h2,h3,p{margin:0}
+
+    .title{
+      font-size:28px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:-.6px;
+      text-align:center;
+      line-height:1.04;
+    }
+
+    .sub{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+      text-align:center;
+    }
+
+    .pill-note{
+      display:inline-block;
+      margin-top:12px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(4,141,100,.22);
+      background:rgba(4,141,100,.10);
+      color:var(--green);
+      font-size:13px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .notice{
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:rgba(22,24,29,.025);
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .input{
+      width:100%;
+      padding:14px 12px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-size:15px;
+      margin-top:12px;
+      outline:none;
+      text-align:center;
+    }
+
+    .confirm-input{
+      text-transform:uppercase;
+      letter-spacing:1.6px;
+      font-weight:900;
+    }
+
+    .btn{
+      border:none;
+      border-radius:18px;
+      padding:14px 15px;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+      transition:transform .15s ease, filter .15s ease, opacity .15s ease;
+      text-decoration:none;
+      text-align:center;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      width:100%;
+    }
+    .btn:active{transform:scale(.985)}
+    .btn:hover{filter:brightness(1.03)}
+    .btn:disabled{opacity:.5;cursor:not-allowed;filter:none;transform:none}
+
+    .btn-primary{
+      background:linear-gradient(135deg,var(--pink),var(--orange),var(--gold));
+      color:#17120b;
+      box-shadow:0 12px 28px rgba(255,106,61,.24);
+    }
+
+    .btn-green{
+      background:linear-gradient(135deg,var(--green),var(--green2));
+      color:#fff;
+      box-shadow:0 12px 28px rgba(4,141,100,.18);
+    }
+
+    .btn-gold{
+      background:linear-gradient(135deg,#f7d466,#e5a92d);
+      color:#17120b;
+      box-shadow:0 12px 28px rgba(229,169,45,.18);
+    }
+
+    .btn-secondary{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    .btn-danger{background:var(--danger);color:#fff}
+
+    .full{margin-top:12px}
+
+    .app-wrap{
+      width:min(96vw,940px);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .top-card{
+      text-align:center;
+      padding:14px;
+      background:
+        radial-gradient(520px 260px at 50% 0%, rgba(255,106,61,.14), transparent 72%),
+        radial-gradient(460px 200px at 50% 12%, rgba(255,79,123,.12), transparent 72%),
+        linear-gradient(180deg,#ffffff,#fff8f1);
+    }
+
+    .status-bar{
+      margin-top:10px;
+      padding:11px 12px;
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,.08);
+      background:rgba(255,106,61,.08);
+      font-size:12px;
+      font-weight:900;
+      line-height:1.35;
+    }
+    .status-ready{color:#86521e}
+    .status-saved{color:#0a7b58}
+    .status-complete{color:#8d6330}
+
+    .hub-container{
+      position:relative;
+      width:min(250px,78vw);
+      height:min(250px,78vw);
+      margin:18px auto 12px;
+    }
+
+    .hub-svg{
+      transform:rotate(-90deg);
+      width:100%;
+      height:100%;
+      filter:drop-shadow(0 18px 28px rgba(255,106,61,.14));
+    }
+
+    .ring-bg{
+      fill:none;
+      stroke:rgba(22,24,29,.075);
+      stroke-width:10;
+    }
+
+    .ring-fill{
+      fill:none;
+      stroke:url(#ringGrad);
+      stroke-width:12;
+      stroke-linecap:round;
+      transition:stroke-dashoffset .85s cubic-bezier(.4,0,.2,1);
+    }
+
+    .hub-label{
+      position:absolute;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      pointer-events:none;
+    }
+
+    .km-val{
+      font-size:48px;
+      line-height:.9;
+      font-weight:900;
+      letter-spacing:-2px;
+    }
+
+    .km-sub{
+      margin-top:9px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.7px;
+      text-transform:uppercase;
+    }
+
+    .tier-strip{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:7px;
+      margin-top:12px;
+    }
+
+    .tier-box{
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      padding:9px 7px;
+      text-align:center;
+    }
+
+    .tier-box.done{
+      border-color:rgba(4,141,100,.28);
+      background:rgba(4,141,100,.08);
+    }
+
+    .tier-box.active-tier{
+      border-color:rgba(255,106,61,.45);
+      background:rgba(255,106,61,.10);
+      box-shadow:0 8px 20px rgba(255,106,61,.10);
+    }
+
+    .tier-top{
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .tier-bottom{
+      margin-top:3px;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:800;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+    @media(min-width:860px){.grid{grid-template-columns:1fr 1fr}}
+
+    .section-title{
+      font-size:16px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.1px;
+      margin:0;
+    }
+
+    .small-title{
+      font-size:16px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .manual-box{
+      margin-top:8px;
+      padding:10px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:linear-gradient(180deg,#fff,rgba(255,244,234,.78));
+    }
+
+    .manual-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:8px;
+    }
+
+    .manual-row .input{
+      flex:1 1 150px;
+      margin-top:0;
+    }
+
+    .manual-row .btn{
+      flex:1 1 150px;
+      width:auto;
+    }
+
+    .collapsible-header,
+    .collectables-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .collapse-toggle{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .collapse-content{display:none}
+    .collapse-content.open{display:block}
+
+    .session-list{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      margin-top:8px;
+    }
+
+    .session-item{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:14px;
+      padding:10px;
+    }
+
+    .session-top{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      font-weight:900;
+      font-size:13px;
+    }
+
+    .session-meta{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.4;
+    }
+
+    .footer-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .footer-actions .btn{
+      flex:1 1 150px;
+      width:auto;
+    }
+
+    .certificate-buttons{
+      display:none;
+      margin-top:10px;
+      grid-template-columns:1fr;
+      gap:8px;
+    }
+
+    .certificate-buttons.show{display:grid}
+
+    .help{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+      line-height:1.4;
+    }
+
+    .login-help{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .login-help a{
+      color:var(--green);
+      font-weight:900;
+      text-decoration:none;
+    }
+
+    .collectables-box{
+      margin-top:10px;
+      padding:10px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:linear-gradient(180deg,#fff,rgba(255,244,234,.78));
+    }
+
+    .collectables-header{
+      padding:10px 12px;
+      border-radius:16px;
+      background:linear-gradient(90deg,rgba(255,106,61,.10),rgba(255,79,123,.08));
+      border:1px solid rgba(255,106,61,.22);
+    }
+
+    .collectables-meta{
+      display:inline-flex;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid rgba(255,106,61,.22);
+      color:#a54b17;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .collectables-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+      margin-top:8px;
+    }
+
+    .collectable-card{
+      position:relative;
+      border:1px solid var(--border);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+      min-height:150px;
+    }
+
+    .collectable-card img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      aspect-ratio:3/4;
+    }
+
+    .collectable-card.locked img{
+      filter:grayscale(1) brightness(.60) blur(13px);
+      transform:scale(1.08);
+    }
+
+    .collectable-card.locked::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(22,24,29,.38));
+      pointer-events:none;
+    }
+
+    .collectable-card.unlocked{cursor:pointer}
+
+    .collectable-overlay{
+      position:absolute;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:4px;
+      background:rgba(255,255,255,.10);
+      text-align:center;
+      padding:8px;
+      z-index:2;
+    }
+
+    .collectable-card.unlocked .collectable-overlay{
+      justify-content:flex-end;
+      align-items:flex-start;
+      background:linear-gradient(180deg,transparent,rgba(0,0,0,.24));
+      color:#fff;
+      text-align:left;
+    }
+
+    .collectable-lock{font-size:24px;line-height:1}
+    .collectable-name{font-size:12px;font-weight:900;letter-spacing:.2px}
+    .collectable-status{font-size:10px;color:rgba(255,255,255,.88);font-weight:800}
+    .collectable-card.locked .collectable-status{color:var(--muted)}
+
+    .belt-card{
+      position:relative;
+      margin-top:8px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+      min-height:130px;
+    }
+
+    .belt-card img{
+      display:block;
+      width:100%;
+      height:auto;
+      object-fit:contain;
+    }
+
+    .belt-card.locked img{
+      filter:grayscale(1) brightness(.58) blur(14px);
+      transform:scale(1.04);
+    }
+
+    .belt-card.locked::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(255,255,255,.20),rgba(22,24,29,.40));
+      pointer-events:none;
+    }
+
+    .belt-overlay{
+      position:absolute;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      text-align:center;
+      padding:16px;
+      z-index:2;
+    }
+
+    .belt-card.unlocked .belt-overlay{
+      justify-content:flex-end;
+      align-items:flex-start;
+      background:linear-gradient(180deg,transparent,rgba(0,0,0,.28));
+      color:#fff;
+      text-align:left;
+    }
+
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(22,24,29,.68);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:12px;
+      z-index:9999;
+    }
+    .overlay.show{display:flex}
+
+    .modal-card{
+      width:min(94vw,520px);
+      max-height:92vh;
+      overflow:auto;
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:26px;
+      padding:18px 16px;
+      text-align:center;
+      box-shadow:0 20px 70px rgba(22,24,29,.24);
+    }
+
+    .modal-title{
+      font-size:34px;
+      font-weight:900;
+      letter-spacing:-1px;
+      line-height:1;
+      margin-bottom:10px;
+    }
+
+    .modal-copy{
+      color:var(--muted);
+      line-height:1.45;
+      font-size:16px;
+      margin-top:10px;
+      margin-bottom:10px;
+    }
+
+    .pill{
+      display:inline-flex;
+      justify-content:center;
+      align-items:center;
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .danger-warning{
+      color:#8c2f2f;
+      border-color:rgba(166,45,45,.45);
+      background:rgba(166,45,45,.10);
+    }
+
+    .reveal-shell{
+      position:relative;
+      max-width:260px;
+      margin:10px auto 8px;
+    }
+
+    .reveal-card{
+      display:block;
+      width:100%;
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:#fff;
+      opacity:0;
+      transform:scale(.88);
+    }
+
+    .reveal-card.revealed{
+      animation:revealPop .45s ease forwards;
+    }
+
+    .reveal-cover{
+      position:absolute;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:8px;
+      border-radius:16px;
+      background:linear-gradient(135deg,rgba(255,79,123,.95),rgba(255,106,61,.92),rgba(246,194,87,.90));
+      color:#fff;
+      cursor:pointer;
+      padding:14px;
+      text-align:center;
+    }
+
+    .reveal-title{font-size:20px;font-weight:900}
+    .reveal-copy{font-size:12px;line-height:1.35;max-width:190px}
+    .reveal-btn{
+      margin-top:3px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.35);
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+    }
+
+    @keyframes revealPop{
+      0%{opacity:0;transform:scale(.84)}
+      60%{opacity:1;transform:scale(1.06)}
+      100%{opacity:1;transform:scale(1)}
+    }
+
+    .card-popup-image{
+      display:block;
+      width:100%;
+      max-width:280px;
+      margin:8px auto 10px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:#fff;
+    }
+
+    .belt-popup-image{
+      display:block;
+      width:100%;
+      margin:8px auto 10px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:#fff;
+    }
+  </style>
+</head>
+
+<body>
+  <section id="loginScreen" class="screen active">
+    <div class="card login-card">
+      <img src="logoandtagpng.png" alt="Walk Run Wrestle" class="logo">
+      <h1 class="title">Sunset Slam</h1>
+      <img id="loginMedalImg" src="SunsetSlamMed.png" alt="Sunset Slam Medal" class="medal">
+      <p class="sub">Built to be simple. No accounts. No tracking. Just your run.</p>
+      <div class="pill-note">Use Strava or any fitness app. Log your progress here.</div>
+
+      <div class="manual-box" style="text-align:left;">
+        <div class="collapsible-header" id="loginHowItWorksToggle">
+          <div class="section-title">How It Works</div>
+          <div class="collapse-toggle" id="loginHowItWorksToggleText">Show</div>
+        </div>
+        <div id="loginHowItWorksContent" class="collapse-content">
+          <div class="notice">
+            1. Track your walk, run, cycle, treadmill, or gym distance in Strava, Garmin, Apple Fitness, Samsung Health, or any fitness app.<br><br>
+            2. Log your distance inside this app.<br><br>
+            3. Start with the 10K tier. When you hit it, you can send proof or continue to 21K.<br><br>
+            4. Hit 21K and you can send proof again or push on to the full 42K marathon.<br><br>
+            5. Collectable cards unlock across the full marathon path, with the final card at 41K. The belt unlocks at 42K.
+          </div>
+        </div>
+      </div>
+
+      <input id="loginCodeInput" class="input confirm-input" type="text" placeholder="Login Code" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <button id="startAppBtn" type="button" class="btn btn-primary full">Continue</button>
+      <div id="loginError" class="help" style="display:none;color:#a62d2d;">Invalid code</div>
+
+      <div class="login-help">
+        Enter your login code to access this challenge.<br><br>
+        Need help? Email <a href="mailto:Contact@walkrunwrestle.com">Contact@walkrunwrestle.com</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="appScreen" class="screen">
+    <div class="app-wrap">
+      <div class="card top-card">
+        <img src="logoandtagpng.png" alt="Walk Run Wrestle" class="logo">
+        <h2 class="title">Sunset Slam</h2>
+        <p class="sub">One journey. Three possible finishes. Choose your distance as you go.</p>
+
+        <div id="statusBar" class="status-bar status-ready">Ready to log progress</div>
+
+        <div class="hub-container">
+          <svg class="hub-svg" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff4f7b"/>
+                <stop offset="50%" stop-color="#ff6a3d"/>
+                <stop offset="100%" stop-color="#f6c257"/>
+              </linearGradient>
+            </defs>
+            <circle class="ring-bg" cx="50" cy="50" r="44"></circle>
+            <circle id="ringFill" class="ring-fill" cx="50" cy="50" r="44" stroke-dasharray="276.46" stroke-dashoffset="276.46"></circle>
+          </svg>
+          <div class="hub-label">
+            <div class="km-val" id="savedTotalKm">0.00</div>
+            <div class="km-sub" id="targetLabel">KM / 10K</div>
+          </div>
+        </div>
+
+        <div class="tier-strip">
+          <div id="tier10" class="tier-box active-tier">
+            <div class="tier-top">10K</div>
+            <div class="tier-bottom">First finish</div>
+          </div>
+          <div id="tier15" class="tier-box">
+            <div class="tier-top">42K</div>
+            <div class="tier-bottom">Full Marathon</div>
+          </div>
+          <div id="tier21" class="tier-box">
+            <div class="tier-top">42K</div>
+            <div class="tier-bottom">Full Marathon</div>
+          </div>
+        </div>
+
+        <div id="certificateButtons" class="certificate-buttons">
+          <a id="cert10Btn" class="btn btn-green" href="https://walkrunwrestle.github.io/WRW-SUNSET-10K-CERT/" target="_blank" rel="noopener noreferrer" style="display:none;">Download 10K Certificate</a>
+          <a id="cert21Btn" class="btn btn-green" href="https://walkrunwrestle.github.io/WRW-SUNSET-21K-CERT/" target="_blank" rel="noopener noreferrer" style="display:none;">Download 21K Half Marathon Certificate</a>
+          <a id="cert42Btn" class="btn btn-green" href="https://walkrunwrestle.github.io/WRW-SUNSET-42K-CERT/" target="_blank" rel="noopener noreferrer" style="display:none;">Download 42K Full Marathon Certificate</a>
+          <button id="viewCompletionBtn" class="btn btn-secondary" style="display:none;">View Completion</button>
+        </div>
+
+        <div class="notice" style="text-align:left;">
+          You can use Strava, Garmin, Apple Fitness, Samsung Health, treadmill screenshots, or any app/device that clearly shows your distance.
+        </div>
+
+        <div class="collectables-box">
+          <div class="collectables-header" id="collectablesToggle">
+            <div class="section-title">Collectables</div>
+            <div class="collectables-meta" id="collectablesMeta">0 / 4 · Show</div>
+          </div>
+          <div id="collectablesContent" class="collapse-content">
+            <div class="notice">
+              Sunset Slam cards unlock across the marathon card path. SS100 unlocks at 41K.
+            </div>
+            <div id="collectablesGrid" class="collectables-grid"></div>
+          </div>
+        </div>
+
+        <div class="collectables-box">
+          <div class="collectables-header" id="beltsToggle">
+            <div class="section-title">Marathon Belts</div>
+            <div class="collectables-meta" id="beltsMeta">0 / 1 · Show</div>
+          </div>
+          <div id="beltsContent" class="collapse-content">
+            <div class="notice">
+              The Sunset Slam Full Marathon Belt unlocks when you hit 42K.
+            </div>
+            <div id="beltCard" class="belt-card locked">
+              <img src="ssbelt.png" alt="Sunset Slam Marathon Belt">
+              <div class="belt-overlay">
+                <div class="collectable-lock" id="beltLockIcon">🔒</div>
+                <div class="collectable-name" id="beltName">Hidden Belt</div>
+                <div class="collectable-status" id="beltStatus">Unlocks at 21K</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="small-title">Log Progress</div>
+          <div class="notice" style="margin-top:0;">
+            Track your session in your chosen fitness app, then save the distance here.
+          </div>
+
+          <div class="manual-box">
+            <div class="collapsible-header" id="logToggle">
+              <div class="section-title">Add Distance</div>
+              <div class="collapse-toggle" id="logToggleText">Show</div>
+            </div>
+
+            <div id="logContent" class="collapse-content">
+              <div class="manual-row">
+                <input id="distanceInput" class="input" type="number" step="0.01" min="0" placeholder="Distance in km">
+                <input id="dateInput" class="input" type="date">
+              </div>
+              <div class="manual-row">
+                <button id="addBtn" class="btn btn-primary">Save Distance</button>
+                <button id="stravaHelpBtn" class="btn btn-secondary">How it works</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="small-title">Saved Runs</div>
+          <div class="manual-box">
+            <div class="collapsible-header" id="savedToggle">
+              <div class="section-title">Saved Runs</div>
+              <div class="collapse-toggle" id="savedToggleText">Show</div>
+            </div>
+            <div id="savedContent" class="collapse-content open">
+              <div id="sessionList" class="session-list"></div>
+            </div>
+          </div>
+
+          <div class="footer-actions">
+            <button id="resetBtn" class="btn btn-secondary">Reset Progress</button>
+            <button id="logoutBtn" class="btn btn-secondary">Log Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="milestoneOverlay" class="overlay">
+    <div class="modal-card">
+      <div class="modal-title" id="milestoneTitle">Well Done!</div>
+      <img id="milestoneMedalImg" src="SunsetSlamMed.png" alt="Sunset Slam Medal" class="medal-small">
+      <div class="modal-copy" id="milestoneCopy">You’ve completed Sunset Slam.</div>
+
+      <div class="footer-actions" style="justify-content:center;">
+        <div class="pill">🏁 Total saved: <span id="milestoneTotal">0.00</span> km</div>
+      </div>
+
+      <div class="notice" style="text-align:left;">
+        Attach your fitness app screenshot(s) to your email.<br><br>
+        Make sure your distance is clearly visible.
+      </div>
+
+      <div class="certificate-row" style="margin-top:10px;">
+        <a id="milestoneCertBtn" class="btn btn-green" href="#" target="_blank" rel="noopener noreferrer">Download Certificate</a>
+      </div>
+
+      <div class="manual-box" style="text-align:left;">
+        <div class="collapsible-header" id="sendProofHelpToggle">
+          <div class="section-title">Send Proof Help</div>
+          <div class="collapse-toggle" id="sendProofHelpToggleText">Show</div>
+        </div>
+        <div id="sendProofHelpContent" class="collapse-content">
+          <div class="notice">
+            If your email app does not open automatically, send your proof manually to <strong>Log@walkrunwrestle.com</strong>.<br><br>
+            Please include your <strong>full name</strong>, <strong>first line of address</strong>, and your <strong>proof screenshot(s)</strong>.
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-actions">
+        <button id="sendProofBtn" class="btn btn-gold">Send Proof</button>
+        <button id="continueBtn" class="btn btn-primary">Continue Challenge</button>
+        <button id="closeMilestoneBtn" class="btn btn-secondary">Close</button>
+      </div>
+
+      <div class="help">
+        Attach your own tracking screenshot(s) to the email before sending.
+      </div>
+    </div>
+  </div>
+
+  <div id="collectableUnlockOverlay" class="overlay">
+    <div class="modal-card">
+      <div class="modal-title" id="unlockTitle">New Unlock</div>
+      <div class="reveal-shell">
+        <img id="unlockImage" src="" alt="Unlocked reward" class="reveal-card">
+        <div id="revealCover" class="reveal-cover" role="button" tabindex="0">
+          <div class="reveal-title">Hidden Reward</div>
+          <div class="reveal-copy" id="revealCopy">Tap to reveal your Sunset Slam reward.</div>
+          <div class="reveal-btn">Reveal Reward</div>
+        </div>
+      </div>
+      <div id="unlockName" class="notice" style="text-align:center;display:none;"></div>
+      <div class="footer-actions">
+        <button id="viewRewardBtn" class="btn btn-primary" disabled>View Reward</button>
+        <button id="closeUnlockBtn" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="rewardViewOverlay" class="overlay">
+    <div class="modal-card">
+      <div class="modal-title" id="rewardPopupTitle">Reward</div>
+      <img id="rewardPopupImage" src="" alt="Reward" class="card-popup-image">
+      <div id="rewardPopupName" class="notice" style="text-align:center;"></div>
+      <div class="footer-actions">
+        <a id="downloadRewardBtn" class="btn btn-primary" download>Download</a>
+        <button id="closeRewardPopupBtn" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="howItWorksOverlay" class="overlay">
+    <div class="modal-card">
+      <div class="modal-title">How Tracking Works</div>
+      <div class="notice" style="text-align:left;margin-top:0;">
+        1. Track your activity using Strava, Garmin, Apple Fitness, Samsung Health, treadmill screenshots, or any app/device that shows your distance.<br><br>
+        2. Save the distance here.<br><br>
+        3. When you hit 10K, choose to send proof or continue to 21K.<br><br>
+        4. When you hit 21K, choose to send proof or continue to 42K.<br><br>
+        5. At 42K, your final completion popup, final certificate, and Marathon Belt unlock.
+      </div>
+      <div class="footer-actions">
+        <a href="https://play.google.com/store/apps/details?id=com.strava" target="_blank" class="btn btn-primary">Android Strava</a>
+        <a href="https://apps.apple.com/app/strava-run-ride-hike/id426826309" target="_blank" class="btn btn-secondary">iPhone Strava</a>
+      </div>
+      <div class="footer-actions">
+        <button id="closeHowItWorksBtn" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resetConfirmOverlay" class="overlay">
+    <div class="modal-card">
+      <div class="modal-title">Delete All Data?</div>
+      <div class="notice danger-warning" style="text-align:left;margin-top:0;">
+        This will delete all saved runs, collectables, belt unlocks, and completion data from this device.
+      </div>
+      <div class="modal-copy">Type <strong>WRW</strong> below to confirm.</div>
+      <input id="resetConfirmInput" class="input confirm-input" type="text" placeholder="Type WRW">
+      <div class="footer-actions">
+        <button id="confirmResetBtn" class="btn btn-danger" disabled>Yes, Delete</button>
+        <button id="cancelResetBtn" class="btn btn-secondary">No</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const RUN_ID = "sunset_slam";
+    const RUN_NAME = "Sunset Slam";
+    const ACCESS_CODE = "SS001";
+    const STORAGE_KEY = "wrw_sunset_slam_sessions_v1";
+    const GOAL_KEY = "wrw_sunset_slam_goal_v1";
+    const MILESTONES_KEY = "wrw_sunset_slam_milestones_v1";
+    const LAST_COMPLETION_KEY = "wrw_sunset_slam_last_completion_v1";
+    const COLLECTABLES_KEY = "wrw_sunset_slam_collectables_v1";
+    const BELTS_KEY = "wrw_sunset_slam_belts_v1";
+    const WRW_VAULT_KEY = "wrw_card_vault";
+    const WRW_EMAIL = "Log@walkrunwrestle.com";
+    const FULL_TARGET_KM = 42;
+    const CIRC = 2 * Math.PI * 44;
+
+    const CERT_LINKS = {
+      10: "https://walkrunwrestle.github.io/WRW-SUNSET-10K-CERT/",
+      21: "https://walkrunwrestle.github.io/WRW-SUNSET-21K-CERT/",
+      42: "https://walkrunwrestle.github.io/WRW-SUNSET-42K-CERT/"
+    };
+
+    const COLLECTABLE_DEFS = [
+      { id:"SS25", name:"Sunset Slam 25%", label:"25%", km:10.25, file:"SS25.PNG" },
+      { id:"SS50", name:"Sunset Slam 50%", label:"50%", km:20.50, file:"SS50.PNG" },
+      { id:"SS75", name:"Sunset Slam 75%", label:"75%", km:30.75, file:"SS75.PNG" },
+      { id:"SS100", name:"Sunset Slam 100%", label:"100%", km:41.00, file:"SS100.PNG" }
+    ];
+
+    const BELT_DEF = {
+      id:"ssbelt",
+      name:"Sunset Slam Full Marathon Belt",
+      label:"42K",
+      km:42,
+      file:"ssbelt.png"
+    };
+
+    let currentUnlock = null;
+    let currentUnlockType = "card";
+
+    const loginScreen = document.getElementById("loginScreen");
+    const appScreen = document.getElementById("appScreen");
+    const loginCodeInput = document.getElementById("loginCodeInput");
+    const loginError = document.getElementById("loginError");
+    const startAppBtn = document.getElementById("startAppBtn");
+
+    const ringFill = document.getElementById("ringFill");
+    const savedTotalKmEl = document.getElementById("savedTotalKm");
+    const targetLabel = document.getElementById("targetLabel");
+    const statusBar = document.getElementById("statusBar");
+
+    const distanceInput = document.getElementById("distanceInput");
+    const dateInput = document.getElementById("dateInput");
+    const addBtn = document.getElementById("addBtn");
+    const sessionList = document.getElementById("sessionList");
+
+    const certificateButtons = document.getElementById("certificateButtons");
+    const cert10Btn = document.getElementById("cert10Btn");
+    const cert21Btn = document.getElementById("cert21Btn");
+    const cert42Btn = document.getElementById("cert42Btn");
+    const viewCompletionBtn = document.getElementById("viewCompletionBtn");
+
+    const milestoneOverlay = document.getElementById("milestoneOverlay");
+    const milestoneTitle = document.getElementById("milestoneTitle");
+    const milestoneCopy = document.getElementById("milestoneCopy");
+    const milestoneTotal = document.getElementById("milestoneTotal");
+    const milestoneCertBtn = document.getElementById("milestoneCertBtn");
+    const sendProofBtn = document.getElementById("sendProofBtn");
+    const continueBtn = document.getElementById("continueBtn");
+    const closeMilestoneBtn = document.getElementById("closeMilestoneBtn");
+
+    const collectablesGrid = document.getElementById("collectablesGrid");
+    const collectablesMeta = document.getElementById("collectablesMeta");
+    const collectablesContent = document.getElementById("collectablesContent");
+    const beltsContent = document.getElementById("beltsContent");
+    const beltsMeta = document.getElementById("beltsMeta");
+    const beltCard = document.getElementById("beltCard");
+
+    const collectableUnlockOverlay = document.getElementById("collectableUnlockOverlay");
+    const unlockTitle = document.getElementById("unlockTitle");
+    const unlockImage = document.getElementById("unlockImage");
+    const unlockName = document.getElementById("unlockName");
+    const revealCover = document.getElementById("revealCover");
+    const viewRewardBtn = document.getElementById("viewRewardBtn");
+    const closeUnlockBtn = document.getElementById("closeUnlockBtn");
+
+    const rewardViewOverlay = document.getElementById("rewardViewOverlay");
+    const rewardPopupTitle = document.getElementById("rewardPopupTitle");
+    const rewardPopupImage = document.getElementById("rewardPopupImage");
+    const rewardPopupName = document.getElementById("rewardPopupName");
+    const downloadRewardBtn = document.getElementById("downloadRewardBtn");
+    const closeRewardPopupBtn = document.getElementById("closeRewardPopupBtn");
+
+    const resetConfirmOverlay = document.getElementById("resetConfirmOverlay");
+    const resetConfirmInput = document.getElementById("resetConfirmInput");
+    const confirmResetBtn = document.getElementById("confirmResetBtn");
+
+    function todayISO(){
+      const d = new Date();
+      const offset = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - offset * 60000);
+      return local.toISOString().split("T")[0];
+    }
+
+    function getSessions(){
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
+
+    function saveSessions(sessions){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+    }
+
+    function getTotalKm(){
+      return getSessions().reduce((sum, session) => sum + (Number(session.distanceKm) || 0), 0);
+    }
+
+    function getGoal(){
+      return Number(localStorage.getItem(GOAL_KEY) || "10");
+    }
+
+    function setGoal(goal){
+      localStorage.setItem(GOAL_KEY, String(goal));
+    }
+
+    function getMilestones(){
+      return JSON.parse(localStorage.getItem(MILESTONES_KEY) || "{}");
+    }
+
+    function saveMilestones(state){
+      localStorage.setItem(MILESTONES_KEY, JSON.stringify(state));
+    }
+
+    function getLastCompletion(){
+      return Number(localStorage.getItem(LAST_COMPLETION_KEY) || "0");
+    }
+
+    function setLastCompletion(km){
+      localStorage.setItem(LAST_COMPLETION_KEY, String(km));
+    }
+
+    function getCollectableState(){
+      const saved = JSON.parse(localStorage.getItem(COLLECTABLES_KEY) || "{}");
+      const state = {};
+      COLLECTABLE_DEFS.forEach(card => state[card.id] = !!saved[card.id]);
+      return state;
+    }
+
+    function saveCollectableState(state){
+      localStorage.setItem(COLLECTABLES_KEY, JSON.stringify(state));
+      syncRunToVault();
+    }
+
+    function getBeltState(){
+      const saved = JSON.parse(localStorage.getItem(BELTS_KEY) || "{}");
+      return { [BELT_DEF.id]: !!saved[BELT_DEF.id] };
+    }
+
+    function saveBeltState(state){
+      localStorage.setItem(BELTS_KEY, JSON.stringify(state));
+      syncRunToVault();
+    }
+
+    function getVaultState(){
+      const raw = JSON.parse(localStorage.getItem(WRW_VAULT_KEY) || "{}");
+      if (!raw || typeof raw !== "object" || Array.isArray(raw)) return { version:1, runs:{}, belts:{} };
+      if (!raw.version) raw.version = 1;
+      if (!raw.runs || typeof raw.runs !== "object" || Array.isArray(raw.runs)) raw.runs = {};
+      if (!raw.belts || typeof raw.belts !== "object" || Array.isArray(raw.belts)) raw.belts = {};
+      return raw;
+    }
+
+    function saveVaultState(vault){
+      localStorage.setItem(WRW_VAULT_KEY, JSON.stringify(vault));
+    }
+
+    function getRunVault(){
+      const vault = getVaultState();
+      if (!vault.runs[RUN_ID]){
+        vault.runs[RUN_ID] = {
+          runId:RUN_ID,
+          runName:RUN_NAME,
+          targetKm:FULL_TARGET_KM,
+          totalKm:0,
+          completed:false,
+          totalRuns:0,
+          cards:{},
+          unlockedCards:[],
+          belts:{},
+          unlockedBelts:[],
+          updatedAt:new Date().toISOString()
+        };
+      }
+      return { vault, runVault:vault.runs[RUN_ID] };
+    }
+
+    function syncRunToVault(){
+      const { vault, runVault } = getRunVault();
+      const sessions = getSessions();
+      const totalKm = getTotalKm();
+      const cardState = getCollectableState();
+      const beltState = getBeltState();
+
+      runVault.runId = RUN_ID;
+      runVault.runName = RUN_NAME;
+      runVault.targetKm = FULL_TARGET_KM;
+      runVault.totalKm = Number(totalKm.toFixed(2));
+      runVault.completed = totalKm >= FULL_TARGET_KM;
+      runVault.totalRuns = sessions.length;
+      runVault.updatedAt = new Date().toISOString();
+      runVault.cards = runVault.cards || {};
+      runVault.belts = runVault.belts || {};
+
+      COLLECTABLE_DEFS.forEach(card => {
+        if (cardState[card.id]){
+          runVault.cards[card.id] = {
+            id:card.id,
+            name:card.name,
+            label:card.label,
+            file:card.file,
+            km:card.km,
+            unlocked:true,
+            unlockedAt:runVault.cards[card.id]?.unlockedAt || new Date().toISOString()
+          };
+        }
+      });
+
+      if (beltState[BELT_DEF.id]){
+        const unlockedAt = runVault.belts[BELT_DEF.id]?.unlockedAt || vault.belts[BELT_DEF.id]?.unlockedAt || new Date().toISOString();
+
+        runVault.belts[BELT_DEF.id] = {
+          id:BELT_DEF.id,
+          name:BELT_DEF.name,
+          label:BELT_DEF.label,
+          file:BELT_DEF.file,
+          km:BELT_DEF.km,
+          unlocked:true,
+          unlockedAt
+        };
+
+        vault.belts[BELT_DEF.id] = {
+          id:BELT_DEF.id,
+          name:BELT_DEF.name,
+          label:BELT_DEF.label,
+          file:BELT_DEF.file,
+          km:BELT_DEF.km,
+          unlocked:true,
+          unlockedAt,
+          runId:RUN_ID,
+          runName:RUN_NAME
+        };
+      }
+
+      runVault.unlockedCards = COLLECTABLE_DEFS
+        .filter(card => !!runVault.cards[card.id]?.unlocked)
+        .map(card => card.id);
+
+      runVault.unlockedBelts = Object.keys(runVault.belts || {})
+        .filter(id => !!runVault.belts[id]?.unlocked);
+
+      saveVaultState(vault);
+    }
+
+    function toggleSection(contentEl, labelEl, after){
+      const open = contentEl.classList.contains("open");
+      contentEl.classList.toggle("open", !open);
+      if (labelEl) labelEl.textContent = open ? "Show" : "Hide";
+      if (after) after();
+    }
+
+    function setStatus(text, className){
+      statusBar.textContent = text;
+      statusBar.className = `status-bar ${className}`;
+    }
+
+    function enterApp(){
+      const code = loginCodeInput.value.trim().toUpperCase();
+      loginCodeInput.value = code;
+      if (code !== ACCESS_CODE){
+        loginError.style.display = "block";
+        return;
+      }
+      loginError.style.display = "none";
+      localStorage.setItem("wrw_sunset_slam_logged_in", "true");
+      loginScreen.classList.remove("active");
+      appScreen.classList.add("active");
+      updateUI();
+    }
+
+    function logout(){
+      localStorage.removeItem("wrw_sunset_slam_logged_in");
+      appScreen.classList.remove("active");
+      loginScreen.classList.add("active");
+    }
+
+    function updateRing(totalKm, goal){
+      const pct = Math.max(0, Math.min(totalKm / goal, 1));
+      ringFill.style.strokeDasharray = CIRC;
+      ringFill.style.strokeDashoffset = CIRC * (1 - pct);
+      savedTotalKmEl.textContent = totalKm.toFixed(2);
+      targetLabel.textContent = `KM / ${goal}K`;
+    }
+
+    function updateTiers(totalKm, goal){
+      [[10,"tier10"],[21,"tier15"],[42,"tier21"]].forEach(([km,id]) => {
+        const el = document.getElementById(id);
+        el.classList.toggle("done", totalKm >= km);
+        el.classList.toggle("active-tier", goal === km && totalKm < km);
+      });
+    }
+
+    function updateCertificates(totalKm){
+      const lastCompletion = getLastCompletion();
+      const hasAny = totalKm >= 10 || lastCompletion >= 10;
+
+      certificateButtons.classList.toggle("show", hasAny);
+
+      cert10Btn.style.display = totalKm >= 10 ? "inline-flex" : "none";
+      cert21Btn.style.display = totalKm >= 21 ? "inline-flex" : "none";
+      cert42Btn.style.display = totalKm >= 42 ? "inline-flex" : "none";
+
+      if (lastCompletion >= 10){
+        viewCompletionBtn.style.display = "inline-flex";
+        const label = lastCompletion === 21 ? "21K Half Marathon" : lastCompletion === 42 ? "42K Full Marathon" : `${lastCompletion}K`;
+        viewCompletionBtn.textContent = `View ${label} Completion`;
+      } else {
+        viewCompletionBtn.style.display = "none";
+      }
+    }
+
+    function renderSessions(){
+      const sessions = getSessions();
+      if (!sessions.length){
+        sessionList.innerHTML = `<div class="session-item"><div class="session-meta">No runs saved yet.</div></div>`;
+        return;
+      }
+
+      sessionList.innerHTML = sessions.slice().reverse().map((session, index) => {
+        const runNumber = sessions.length - index;
+        return `
+          <div class="session-item">
+            <div class="session-top">
+              <span>Run ${runNumber}</span>
+              <span>${Number(session.distanceKm).toFixed(2)} km</span>
+            </div>
+            <div class="session-meta">Date: ${new Date(session.date).toLocaleDateString()}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function updateCollectablesHeader(){
+      const state = getCollectableState();
+      const count = Object.values(state).filter(Boolean).length;
+      const open = collectablesContent.classList.contains("open");
+      collectablesMeta.textContent = `${count} / ${COLLECTABLE_DEFS.length} · ${open ? "Hide" : "Show"}`;
+    }
+
+    function renderCollectables(){
+      const state = getCollectableState();
+      collectablesGrid.innerHTML = COLLECTABLE_DEFS.map(card => {
+        const unlocked = !!state[card.id];
+        const safeName = card.name.replace(/'/g, "\\'");
+        return `
+          <div class="collectable-card ${unlocked ? "unlocked" : "locked"}" ${unlocked ? `onclick="openReward('${card.file}','${safeName}','card')"` : ""}>
+            <img src="${card.file}" alt="${card.name}">
+            <div class="collectable-overlay">
+              <div class="collectable-lock">${unlocked ? "✓" : "🔒"}</div>
+              <div class="collectable-name">${unlocked ? `${card.name}` : "Hidden Card"}</div>
+              <div class="collectable-status">${unlocked ? `${card.label} unlocked` : `Unlocks at ${card.km.toFixed(2)}K`}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+      updateCollectablesHeader();
+    }
+
+    function updateBeltsHeader(){
+      const state = getBeltState();
+      const unlocked = !!state[BELT_DEF.id];
+      const open = beltsContent.classList.contains("open");
+      beltsMeta.textContent = `${unlocked ? 1 : 0} / 1 · ${open ? "Hide" : "Show"}`;
+    }
+
+    function renderBelt(){
+      const state = getBeltState();
+      const unlocked = !!state[BELT_DEF.id];
+      beltCard.classList.toggle("locked", !unlocked);
+      beltCard.classList.toggle("unlocked", unlocked);
+      document.getElementById("beltLockIcon").textContent = unlocked ? "✓" : "🔒";
+      document.getElementById("beltName").textContent = unlocked ? BELT_DEF.name : "Hidden Belt";
+      document.getElementById("beltStatus").textContent = unlocked ? "42K unlocked" : "Unlocks at 42K";
+      beltCard.onclick = unlocked ? () => openReward(BELT_DEF.file, BELT_DEF.name, "belt") : null;
+      updateBeltsHeader();
+    }
+
+    function showUnlock(item, type){
+      currentUnlock = item;
+      currentUnlockType = type;
+      unlockTitle.textContent = type === "belt" ? "Belt Unlocked" : "New Unlock";
+      unlockImage.src = item.file;
+      unlockImage.alt = item.name;
+      unlockImage.classList.toggle("belt-popup-image", type === "belt");
+      unlockImage.classList.toggle("card-popup-image", type !== "belt");
+      unlockImage.classList.remove("revealed");
+      unlockName.textContent = `${item.name} · ${item.label}`;
+      unlockName.style.display = "none";
+      revealCover.style.display = "flex";
+      viewRewardBtn.disabled = true;
+      collectableUnlockOverlay.classList.add("show");
+    }
+
+    function revealUnlock(){
+      if (!currentUnlock) return;
+      revealCover.style.display = "none";
+      unlockImage.classList.add("revealed");
+      unlockName.style.display = "block";
+      viewRewardBtn.disabled = false;
+    }
+
+    function openReward(file, name, type){
+      rewardPopupTitle.textContent = type === "belt" ? "Marathon Belt" : "Collectable Card";
+      rewardPopupImage.src = file;
+      rewardPopupImage.alt = name;
+      rewardPopupImage.className = type === "belt" ? "belt-popup-image" : "card-popup-image";
+      rewardPopupName.textContent = name;
+      downloadRewardBtn.href = file;
+      downloadRewardBtn.setAttribute("download", file.split("/").pop());
+      rewardViewOverlay.classList.add("show");
+    }
+    window.openReward = openReward;
+
+    function checkRewards(previousKm, currentKm){
+      const cardState = getCollectableState();
+      const newCards = [];
+
+      COLLECTABLE_DEFS.forEach(card => {
+        if (currentKm >= card.km && !cardState[card.id]){
+          cardState[card.id] = true;
+          newCards.push(card);
+        }
+      });
+
+      saveCollectableState(cardState);
+
+      const beltState = getBeltState();
+      let newBelt = null;
+      if (currentKm >= BELT_DEF.km && !beltState[BELT_DEF.id]){
+        beltState[BELT_DEF.id] = true;
+        newBelt = BELT_DEF;
+      }
+
+      saveBeltState(beltState);
+      renderCollectables();
+      renderBelt();
+
+      const crossed = newCards.find(card => previousKm < card.km && currentKm >= card.km);
+      if (crossed) showUnlock(crossed, "card");
+      else if (newBelt && previousKm < BELT_DEF.km) showUnlock(newBelt, "belt");
+    }
+
+    function openMilestonePopup(km, isFinal = false){
+      const total = getTotalKm();
+      milestoneTitle.textContent = "Well Done!";
+      const distanceLabel = km === 21 ? "21K Half Marathon" : km === 42 ? "42K Full Marathon" : `${km}K`;
+      milestoneCopy.innerHTML = `You’ve completed <strong>${RUN_NAME} ${distanceLabel}</strong>.`;
+      milestoneTotal.textContent = total.toFixed(2);
+      milestoneCertBtn.href = CERT_LINKS[km] || CERT_LINKS[21];
+      milestoneCertBtn.textContent = km === 21 ? "Download 21K Half Marathon Certificate" : km === 42 ? "Download 42K Full Marathon Certificate" : `Download ${km}K Certificate`;
+      continueBtn.style.display = isFinal ? "none" : "inline-flex";
+      closeMilestoneBtn.textContent = "Close";
+      setLastCompletion(km);
+      updateCertificates(total);
+      milestoneOverlay.classList.add("show");
+    }
+
+    function closeMilestonePopup(){
+      milestoneOverlay.classList.remove("show");
+    }
+
+    function sendProof(){
+      const total = getTotalKm().toFixed(2);
+      const goal = getGoal();
+      const subject = encodeURIComponent(`${RUN_NAME} ${Math.min(goal, 42)}K - Completed`);
+      const body = encodeURIComponent(
+        `Hi WRW,\n\nI have completed Sunset Slam.\n\nTotal saved: ${total} km\n\nFull name:\nFirst line of address:\n\nI have attached my proof screenshot(s).\n\nThanks`
+      );
+      window.location.href = `mailto:${WRW_EMAIL}?subject=${subject}&body=${body}`;
+    }
+
+    function continueChallenge(){
+      const goal = getGoal();
+      if (goal === 10) setGoal(21);
+      else if (goal === 21) setGoal(42);
+      closeMilestonePopup();
+      updateUI(true);
+    }
+
+    function markAndMaybePopup(totalKm){
+      const milestones = getMilestones();
+      const goal = getGoal();
+
+      if (totalKm >= 10 && !milestones["10"] && goal === 10){
+        milestones["10"] = true;
+        saveMilestones(milestones);
+        openMilestonePopup(10, false);
+        return;
+      }
+
+      if (totalKm >= 21 && !milestones["21"] && goal === 21){
+        milestones["21"] = true;
+        saveMilestones(milestones);
+        openMilestonePopup(21, false);
+        return;
+      }
+
+      if (totalKm >= 42 && !milestones["42"]){
+        milestones["42"] = true;
+        saveMilestones(milestones);
+        openMilestonePopup(42, true);
+      }
+    }
+
+    function addRun(){
+      if (document.activeElement && typeof document.activeElement.blur === "function") document.activeElement.blur();
+
+      const raw = String(distanceInput.value || "").replace(",", ".").trim();
+      const distanceKm = Number(raw);
+      const date = dateInput.value;
+
+      if (!distanceKm || distanceKm <= 0){
+        alert("Enter a valid distance.");
+        return;
+      }
+
+      if (!date){
+        alert("Select a date for this run.");
+        return;
+      }
+
+      const previousKm = getTotalKm();
+      const sessions = getSessions();
+
+      sessions.push({
+        id:Date.now(),
+        distanceKm:Number(distanceKm.toFixed(2)),
+        date
+      });
+
+      saveSessions(sessions);
+      distanceInput.value = "";
+      dateInput.value = todayISO();
+
+      const newTotal = getTotalKm();
+      setStatus(`Saved ${distanceKm.toFixed(2)} km`, "status-saved");
+      updateUI(true);
+      checkRewards(previousKm, newTotal);
+      markAndMaybePopup(newTotal);
+    }
+
+    function updateUI(preserveStatus = false){
+      const total = getTotalKm();
+      const goal = getGoal();
+
+      updateRing(total, goal);
+      updateTiers(total, goal);
+      updateCertificates(total);
+      renderSessions();
+      renderCollectables();
+      renderBelt();
+      syncRunToVault();
+
+      if (!preserveStatus){
+        if (total >= 42) setStatus("Sunset Slam Full Marathon complete", "status-complete");
+        else if (total >= goal) setStatus(`${goal}K reached`, "status-saved");
+        else setStatus("Ready to log progress", "status-ready");
+      }
+    }
+
+    function openResetConfirm(){
+      resetConfirmInput.value = "";
+      confirmResetBtn.disabled = true;
+      resetConfirmOverlay.classList.add("show");
+      setTimeout(() => resetConfirmInput.focus(), 50);
+    }
+
+    function resetAll(){
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(GOAL_KEY);
+      localStorage.removeItem(MILESTONES_KEY);
+      localStorage.removeItem(LAST_COMPLETION_KEY);
+      localStorage.removeItem(COLLECTABLES_KEY);
+      localStorage.removeItem(BELTS_KEY);
+
+      const vault = getVaultState();
+      if (vault.runs && vault.runs[RUN_ID]) delete vault.runs[RUN_ID];
+      if (vault.belts && vault.belts[BELT_DEF.id]) delete vault.belts[BELT_DEF.id];
+      saveVaultState(vault);
+
+      resetConfirmOverlay.classList.remove("show");
+      setStatus("Progress reset", "status-ready");
+      updateUI(true);
+    }
+
+    function hideMissingImages(){
+      ["loginMedalImg","milestoneMedalImg"].forEach(id => {
+        const img = document.getElementById(id);
+        img.onerror = () => img.style.display = "none";
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      hideMissingImages();
+      dateInput.value = todayISO();
+
+      loginCodeInput.addEventListener("input", () => {
+        loginCodeInput.value = loginCodeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      });
+
+      startAppBtn.addEventListener("click", enterApp);
+      loginCodeInput.addEventListener("keydown", e => { if (e.key === "Enter") enterApp(); });
+      addBtn.addEventListener("click", addRun);
+      sendProofBtn.addEventListener("click", sendProof);
+      continueBtn.addEventListener("click", continueChallenge);
+      closeMilestoneBtn.addEventListener("click", closeMilestonePopup);
+      viewCompletionBtn.addEventListener("click", () => {
+        const km = getLastCompletion();
+        if (km >= 10) openMilestonePopup(km, km >= 42);
+      });
+
+      document.getElementById("loginHowItWorksToggle").addEventListener("click", () => toggleSection(
+        document.getElementById("loginHowItWorksContent"),
+        document.getElementById("loginHowItWorksToggleText")
+      ));
+
+      document.getElementById("logToggle").addEventListener("click", () => toggleSection(
+        document.getElementById("logContent"),
+        document.getElementById("logToggleText")
+      ));
+
+      document.getElementById("savedToggle").addEventListener("click", () => toggleSection(
+        document.getElementById("savedContent"),
+        document.getElementById("savedToggleText")
+      ));
+
+      document.getElementById("collectablesToggle").addEventListener("click", () => toggleSection(
+        collectablesContent,
+        null,
+        updateCollectablesHeader
+      ));
+
+      document.getElementById("beltsToggle").addEventListener("click", () => toggleSection(
+        beltsContent,
+        null,
+        updateBeltsHeader
+      ));
+
+      document.getElementById("sendProofHelpToggle").addEventListener("click", () => toggleSection(
+        document.getElementById("sendProofHelpContent"),
+        document.getElementById("sendProofHelpToggleText")
+      ));
+
+      document.getElementById("stravaHelpBtn").addEventListener("click", () => {
+        document.getElementById("howItWorksOverlay").classList.add("show");
+      });
+
+      document.getElementById("closeHowItWorksBtn").addEventListener("click", () => {
+        document.getElementById("howItWorksOverlay").classList.remove("show");
+      });
+
+      revealCover.addEventListener("click", revealUnlock);
+      revealCover.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") revealUnlock(); });
+
+      viewRewardBtn.addEventListener("click", () => {
+        if (!currentUnlock) return;
+        collectableUnlockOverlay.classList.remove("show");
+        openReward(currentUnlock.file, currentUnlock.name, currentUnlockType);
+      });
+
+      closeUnlockBtn.addEventListener("click", () => collectableUnlockOverlay.classList.remove("show"));
+      closeRewardPopupBtn.addEventListener("click", () => rewardViewOverlay.classList.remove("show"));
+
+      document.getElementById("resetBtn").addEventListener("click", openResetConfirm);
+      document.getElementById("logoutBtn").addEventListener("click", logout);
+
+      resetConfirmInput.addEventListener("input", () => {
+        resetConfirmInput.value = resetConfirmInput.value.toUpperCase();
+        confirmResetBtn.disabled = resetConfirmInput.value !== "WRW";
+      });
+
+      confirmResetBtn.addEventListener("click", resetAll);
+      document.getElementById("cancelResetBtn").addEventListener("click", () => resetConfirmOverlay.classList.remove("show"));
+
+      if (localStorage.getItem("wrw_sunset_slam_logged_in") === "true"){
+        loginScreen.classList.remove("active");
+        appScreen.classList.add("active");
+      }
+
+      updateUI();
+    });
+  </script>
+</body>
+</html>
